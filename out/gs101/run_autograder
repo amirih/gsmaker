@@ -1,0 +1,8 @@
+#!/bin/bash
+cd /autograder/source
+#cp /autograder/submission/HelloGradeScope.java /autograder/source/src/
+cp /autograder/submission/HelloGradeScope.java /autograder/source/src/
+cp /autograder/submission/HelloGradeScope2.java /autograder/source/src/
+
+bash ./compile.sh
+bash ./run.sh >/autograder/results/results.json
