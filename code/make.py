@@ -7,6 +7,6 @@ if __name__ == '__main__':
     course_name = 'gs101'
     language = 'java'
     configuration = config.get_configs(course_name, language)
-    out_dir = autograder.build(configuration, language)
-    print(f'{file.zip(out_dir)} created')
+    out_dir = autograder.build(configuration)
+    print(f'{out_dir} created')
     

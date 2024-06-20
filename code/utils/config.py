@@ -2,6 +2,7 @@
 def get_java_configs(course_name):
     configs= {}
     # dont modify or do by caution:
+    configs['language'] = 'java'
     configs['output_dir'] = f'out/{course_name}'
     configs['lib_dir'] = 'templates/java/lib'
     configs['compile_bash'] = 'templates/java/compile.sh'

@@ -1,8 +1,9 @@
 import utils.file as file
 import utils.gs.java as gs_java
 
-def build(configs, language):
+def build(configs):
     output_dir = configs['output_dir']
+    language = configs['language']
     file.remove(output_dir)
     if language == 'java':
         return build_java(configs, output_dir)
@@ -19,5 +20,6 @@ def build_java(configs, output_dir):
     
     file.write(gs_java.get_run_autograder(configs), output_dir + '/run_autograder')
     file.write(gs_java.get_run_tests(configs), output_dir + '/src/RunTests.java')
+    file.zip(output_dir)
     return output_dir
 
