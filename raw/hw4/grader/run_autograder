@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+# Set up autograder files
+
+cp /autograder/submission/compareFeat.py /autograder/source/compareFeat.py
+cp /autograder/submission/compareOpt.py /autograder/source/compareOpt.py
+cp /autograder/submission/extractFeat.py /autograder/source/extractFeat.py
+cp /autograder/submission/selectFeat.py /autograder/source/selectFeat.py
+cp /autograder/submission/splitData.py /autograder/source/splitData.py
+
+cd /autograder/source
+
+python3 run_tests.py

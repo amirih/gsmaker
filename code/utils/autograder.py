@@ -8,6 +8,8 @@ def build(configs):
     file.remove(output_dir)
     if language == "java":
         return build_java(configs, output_dir)
+    elif language == "python":
+        return build_python(configs, output_dir)
     else:
         raise Exception("Language not supported yet")
 
@@ -27,5 +29,18 @@ def build_java(configs, output_dir):
     file.write(
         gs_java.get_run_tests(configs), output_dir + "/src/RunTests.java"
     )
+    file.zip(output_dir)
+    return output_dir
+
+
+def build_python(configs, output_dir):
+    file.copy(configs["run_tests_template"], output_dir + "/run_tests.py")
+    file.copy(configs["setup_bash"], output_dir + "/setup.sh")
+    file.copy(configs["run_autograder_bash"], output_dir + "/run_autograder")
+    file.copy(configs["test_cases"], output_dir + "/tests/")
+    file.copy(configs["starter_code"], output_dir)
+    file.copy(configs["requirements"], output_dir)
+    file.copy(configs["data_files"], output_dir + "/data/")
+
     file.zip(output_dir)
     return output_dir
