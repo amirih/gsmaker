@@ -1,5 +1,7 @@
 import os
 
+# README:
+
 
 def get_java_configs(assignment_name):
     configs = {}
@@ -25,7 +27,7 @@ def get_java_configs(assignment_name):
     configs["test_cases"] = [
         os.path.join(
             "assignments",
-            "cs171",
+            assignment_name,
             "test_cases",
             "PlaylistTest.java",
         )
@@ -54,26 +56,21 @@ def get_python_configs(assignment_name):
     configs["zip_dir"] = os.path.join("out", "autograd.zip")
 
     # update these to your own files:
-    configs["students_file_names"] = []
-    configs["test_cases"] = [
-        os.path.join(
-            "assignments",
-            "cs334-hw3",
-            "test_cases",
-            "test_assess.py",
-        ),
-        os.path.join(
-            "assignments",
-            "cs334-hw3",
-            "test_cases",
-            "test_dt.py",
-        ),
-        os.path.join(
-            "assignments",
-            "cs334-hw3",
-            "test_cases",
-            "test_files.py",
-        ),
+    configs["student_submission_files"] = [
+        "dt.py",
+        "modelAssess.py",
+        "README.txt",
+    ]
+
+    configs["unit_tests_dir"] = os.path.join(
+        "assignments", assignment_name, "unit_tests"
+    )
+
+    # update these to your own files:
+    configs["unit_tests_files"] = [
+        "test_dt.py",
+        "test_assess.py",
+        "test_files.py",
     ]
 
     # add option to include starter code here
@@ -81,33 +78,34 @@ def get_python_configs(assignment_name):
         # os.path.join("assignments", "cs171", "starter_code", "episode.py")
     ]
 
+    # optional: add data files
     configs["data_files"] = [
         os.path.join(
             "assignments",
-            "cs334-hw3",
+            assignment_name,
             "data",
             "space_testx.csv",
         ),
         os.path.join(
             "assignments",
-            "cs334-hw3",
+            assignment_name,
             "data",
             "space_testy.csv",
         ),
         os.path.join(
             "assignments",
-            "cs334-hw3",
+            assignment_name,
             "data",
             "space_trainx.csv",
         ),
         os.path.join(
             "assignments",
-            "cs334-hw3",
+            assignment_name,
             "data",
             "space_trainy.csv",
         ),
     ]
-
+    # change this to your requirements file
     configs["requirements"] = os.path.join(
         "templates", "python", "requirements.txt"
     )

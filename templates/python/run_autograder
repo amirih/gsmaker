@@ -2,8 +2,7 @@
 
 # Set up autograder files
 
-cp /autograder/submission/dt.py /autograder/source/dt.py
-cp /autograder/submission/modelAssess.py /autograder/source/modelAssess.py
+cp /autograder/submission/{FILE_NAME} /autograder/source/{FILE_NAME}
 
 cd /autograder/source
 
