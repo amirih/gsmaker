@@ -24,19 +24,30 @@ def get_java_configs(assignment_name):
 
     # update these to your own files:
     configs["students_file_names"] = ["Playlist.java"]
-    configs["test_cases"] = [
-        os.path.join(
-            "assignments",
-            assignment_name,
-            "test_cases",
-            "PlaylistTest.java",
-        )
+    configs["unit_tests_dir"] = os.path.join(
+        "assignments", assignment_name, "unit_tests"
+    )
+    # configs["test_cases"] = [
+    #     os.path.join(
+    #         "assignments",
+    #         assignment_name,
+    #         "unit_tests",
+    #         "PlaylistTest.java",
+    #     )
+    # ]
+    configs["unit_tests_files"] = [
+        "PlaylistTest.java",
     ]
 
     # add option to include starter code here
     configs["starter_code"] = [
-        os.path.join("assignments", "cs171", "starter_code", "Episode.java")
+        os.path.join(
+            "assignments", assignment_name, "starter_code", "Episode.java"
+        )
     ]
+
+    # optional: add data files
+    configs["data_files"] = []
 
     return configs
 

@@ -21,14 +21,16 @@ def build_java(configs, output_dir):
     file.copy(configs["run_bash"], output_dir + "/run.sh")
     file.copy(configs["setup_bash"], output_dir + "/setup.sh")
     file.copy(configs["gs_lib_dir"], output_dir + "/src/")
-    file.copy(configs["test_cases"], output_dir + "/src/")
     file.copy(configs["starter_code"], output_dir + "/src/")
+
+    unit_test_file_names = configs["unit_tests_files"]
+
+    for test_case in unit_test_file_names:
+        path = os.path.join(configs["unit_tests_dir"], test_case)
+        file.copy(path, output_dir + "/tests/")
 
     file.write(
         gs_java.get_run_autograder(configs), output_dir + "/run_autograder"
-    )
-    file.write(
-        gs_java.get_run_tests(configs), output_dir + "/src/RunTests.java"
     )
     file.zip(output_dir)
     return output_dir
