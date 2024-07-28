@@ -10,8 +10,8 @@ def build(configs):
     language = configs["language"]
     if language == "java":
         return build_java(configs)
-    # elif language == "python":
-    #     return build_python(configs)
+    elif language == "python":
+        return build_python(configs)
     else:
         raise Exception("Language not supported yet")
 
@@ -180,33 +180,106 @@ def build_java(configs):
     )
 
 
-# def build_python(configs, output_dir):
-#     file.copy(configs["run_tests_template"], output_dir + "/run_tests.py")
-#     file.copy(configs["setup_bash"], output_dir + "/setup.sh")
-#     file.copy(configs["starter_code"], output_dir)
-#     file.copy(configs["requirements"], output_dir)
-#     file.copy(configs["data_files"], output_dir + "/data/")
+def build_python(configs):
+    file_list = []
 
-#     # Open a new .sh file in write mode
-#     with open(output_dir + "/run_autograder", "w") as autograder_file:
-#         autograder_file.write("#!/bin/bash\n")
+    # Add backend files
+    backend_files_paths = [
+        configs["setup_bash"],
+        configs["run_tests_template"],
+        configs["requirements"],
+    ]
 
-#     required_files = configs["student_submission_files"]
+    # modify the run_autograder file to copy the required files
+    with open(configs["run_autograder_bash"], "r") as f:
+        run_autograder_content = f.read()
+        required_files = configs["student_submission_files"]
+        for file_name in required_files:
+            run_autograder_content += f"cp /autograder/submission/{file_name} /autograder/source/{file_name}\n"
+        run_autograder_content += "cd /autograder/source\n"
+        run_autograder_content += "python3 run_tests.py\n"
+        file_list.append(("run_autograder", run_autograder_content))
 
-#     for file_name in required_files:
-#         with open(output_dir + "/run_autograder", "a") as autograder_file:
-#             autograder_file.write(
-#                 f"cp /autograder/submission/{file_name} /autograder/source/{file_name}\n"
-#             )
+    for file_path in backend_files_paths:
+        with open(file_path, "rb") as f:
+            file_content = f.read()
+            file_list.append((os.path.basename(file_path), file_content))
 
-#     with open(output_dir + "/run_autograder", "a") as autograder_file:
-#         autograder_file.write("cd /autograder/source\npython3 run_tests.py\n")
+    # Handle files uploaded from frontend
+    def add_files_from_frontend(zip_file):
+        if zip_file is None:
+            return
+        try:
+            with zipfile.ZipFile(zip_file, "r") as zip_ref:
+                print(f"zip_ref: {zip_ref}")
+                print(f"zip_ref.infolist(): {zip_ref.infolist()}")
+                for file_info in zip_ref.infolist():
+                    print(f"file_info: {file_info}")
+                    with zip_ref.open(file_info) as f:
+                        f.seek(0)
+                        file_content = f.read()
+                        if zip_file == configs["unit_tests_files"]:
+                            file_list.append(
+                                (f"tests/{file_info.filename}", file_content)
+                            )
+                        elif zip_file == configs["starter_code"]:
+                            file_list.append(
+                                (f"src/{file_info.filename}", file_content)
+                            )
+                        elif zip_file == configs["data_files"]:
+                            file_list.append(
+                                (f"data/{file_info.filename}", file_content)
+                            )
+                        else:
+                            file_list.append((file_info.filename, file_content))
+        except zipfile.BadZipFile as e:
+            if zip_file == configs["unit_tests_files"]:
+                configs["unit_tests_files"].seek(0)
+                file_list.append(
+                    (
+                        "tests/" + configs["unit_tests_files"].filename,
+                        configs["unit_tests_files"].read(),
+                    )
+                )
+            elif zip_file == configs["starter_code"]:
+                configs["starter_code"].seek(0)
+                file_list.append(
+                    (
+                        "src/" + configs["starter_code"].filename,
+                        configs["starter_code"].read(),
+                    )
+                )
+            elif zip_file == configs["data_files"]:
+                configs["data_files"].seek(0)
+                file_list.append(
+                    (
+                        "data/" + configs["data_files"].filename,
+                        configs["data_files"].read(),
+                    )
+                )
+            else:
+                zip_file.seek(0)
+                file_content = zip_file.read()
+                file_list.append(
+                    (os.path.basename(zip_file.name), file_content)
+                )
+        except Exception as e:
+            print(
+                f"An error occurred while processing {zip_file}. Exception: {e}"
+            )
 
-#     unit_test_file_names = configs["unit_tests_files"]
+    add_files_from_frontend(configs["unit_tests_files"])
+    add_files_from_frontend(configs["starter_code"])
+    add_files_from_frontend(configs["data_files"])
 
-#     for test_case in unit_test_file_names:
-#         path = os.path.join(configs["unit_tests_dir"], test_case)
-#         file.copy(path, output_dir + "/tests/")
+    assignment_name = configs["assignment_name"]
 
-#     file.zip(output_dir)
-#     return output_dir
+    zip_memory = zip_files(file_list, f"{assignment_name}.zip")
+    return send_file(
+        io.BytesIO(
+            zip_memory.getvalue()
+        ),  # Ensure proper content is read from BytesIO
+        mimetype="application/zip",
+        as_attachment=True,
+        download_name=f"{assignment_name}.zip",
+    )

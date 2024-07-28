@@ -1,9 +1,1 @@
 #!/usr/bin/env bash
-
-# Set up autograder files
-
-cp /autograder/submission/{FILE_NAME} /autograder/source/{FILE_NAME}
-
-cd /autograder/source
-
-python3 run_tests.py

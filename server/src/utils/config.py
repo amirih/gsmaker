@@ -40,6 +40,7 @@ def get_python_configs(
     configs["setup_bash"] = "templates/python/setup.sh"
     configs["run_tests_template"] = "templates/python/run_tests.py"
     configs["run_autograder_bash"] = "templates/python/run_autograder"
+    configs["requirements"] = "templates/python/requirements.txt"
 
     # update these to your own files:
     configs["student_submission_files"] = required_files
@@ -65,7 +66,7 @@ def get_configs(
             starter_code_list,
             data_list,
         )
-    elif language == "python":
+    elif language == "python" or language == "":
         return get_python_configs(
             assignment_name,
             required_files,
