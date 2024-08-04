@@ -30,14 +30,14 @@ function Form() {
         data.append('starter_code', formData.starter_code);
         data.append('data', formData.data);
 
-        axios.post('http://localhost:5000/api/form-submit', data, {
+        axios.post('https://autograder.mathcs.emory.edu//api/form-submit', data, {
             responseType: 'blob' // Ensure response is treated as a Blob
         })
             .then(response => {
                 const url = window.URL.createObjectURL(new Blob([response.data]));
                 const a = document.createElement('a');
                 a.href = url;
-                a.download = 'output.zip'; // Provide the correct filename here
+                a.download = `${formData.assignment_name}.zip`;
                 document.body.appendChild(a);
                 a.click();
                 a.remove();
@@ -59,26 +59,26 @@ function Form() {
     return (
         <form onSubmit={handleSubmit}>
             <label>
-                Enter your assignment name:
+                Enter your assignment name:<span style={{ color: 'red' }}>*</span>
                 <input required type="text" name="assignment_name" value={formData.assignment_name} onChange={handleChange} placeholder="CS326-HW1" />
             </label>
             <br />
             <label>
-                What language is the assignment in?
+                What language is the assignment in?<span style={{ color: 'red' }}>*</span>
                 <select required name="language" value={formData.language} onChange={handleChange}>
                     <option value="python">Python</option>
                     <option value="java">Java</option>
-                    <option value="c">C</option>
+                    {/* <option value="c">C</option> */}
                 </select>
             </label>
             <br />
             <label>
-                What file are the students supposed to submit? (Enter a comma separated list with the file extension)
+                What file are the students supposed to submit? (Enter a comma separated list with the file extension)<span style={{ color: 'red' }}>*</span>
                 <input required type="text" name="required_files" value={formData.required_files} onChange={handleChange} placeholder="model.py, README.txt" />
             </label>
             <br />
             <label>
-                Enter a .zip file containing test cases. See the grading handbook for more details
+                Enter a .zip file containing test cases. See the grading handbook for more details<span style={{ color: 'red' }}>*</span>
                 <input required type="file" name="test_cases" onChange={handleChange} />
             </label>
             <br />
