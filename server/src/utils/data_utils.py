@@ -17,6 +17,7 @@ def process_data(required_files, test_cases, starter_code, data):
     #     print(test_cases)
     #     print(test_cases_dir)
     # else:
+    # zip up the test cases
     test_cases_dir = test_cases
 
     if starter_code:
