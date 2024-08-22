@@ -1,4 +1,4 @@
-apt-get -y install openjdk-11-jdk
+apt-get -y install openjdk-21-jdk
 
 # The following lines are to make sure we can install packages from maven
 # See https://bugs.launchpad.net/ubuntu/+source/ca-certificates-java/+bug/1396760
